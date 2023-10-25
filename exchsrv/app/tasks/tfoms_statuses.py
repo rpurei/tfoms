@@ -1,0 +1,11 @@
+TFOMS_TEST_ADDRESS = 'Тестовый ТФОМС'
+TFOMS_MAIN_ADDRESS = 'Основной ТФОМС'
+TFOMS_TEST_SEND_READY = 'Готово к отправке'
+TFOMS_MAIN_SEND_READY = 'Отправка в основной контур'
+
+TFOMS_FLK_FAIL_STATUS = 'ФЛК не пройден'
+TFOMS_FLK_SUCCESS_STATUS = 'ФЛК пройден'
+TFOMS_BILL_REG_FLK_STATUS = 'Счет зарегистрирован сервисом счетов и помещен в очередь на ФЛК'
+TFOMS_BILL_WAIT_STATUS = 'Счет ожидает обработки'
+TFOMS_PRE_MEK_SUCCESS_STATUS = 'Предварительный МЭК пройден'
+TFOMS_PRE_MEK_FAIL_STATUS = 'Предварительный МЭК не пройден'

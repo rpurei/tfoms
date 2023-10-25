@@ -1,0 +1,23 @@
+<nav class="navbar navbar-expand-lg fixed-top navbar-light bg-light shadow p-3 mb-5 bg-white rounded">
+    <div class="container">
+        <a class="navbar-brand" href="{{ url_for('transactions.index_show') }}"></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('transactions.index_show') }}"><i class="bi bi-house-fill"></i> Главная</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('opt.show_report') }}"><i class="bi bi-file-earmark-bar-graph"></i> Отчет</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('users.users_show') }}"><i class="bi bi-person-lines-fill"></i> Пользователи</a></li>
+                {% if current_user.is_authenticated %}
+                <li class="nav-item dropdown">
+                    <a class="dropdown-toggle btn btn-outline-success" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-person-fill"></i> {{ login }}</a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="{{ url_for('users.auth_logout') }}"><i class="bi bi-arrow-left-square" style="color: #dc3545"></i> Выход</a></li>
+                    </ul>
+                </li>
+                {% else %}
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('users.auth_login') }}"><i class="bi bi-person-fill"></i> Вход</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+    {{ super() }}
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <a class="btn btn-outline-secondary" href="{{ url_for('transactions.transaction_detail', transaction_id=transaction_id) }}" role="button"><i class="bi bi-arrow-left-square"></i> К транзакции</a>
+            </div>
+        </div>
+    </div>
+    <div class="flex-fill">
+        <div class="card" style="margin-top: 20px;">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <h4 style="margin-bottom: 20px;"><i class="bi bi-file-earmark-minus" style="color: #dc3545"></i> Случаи для исключения из протокола</h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <form action="{{ url_for('protocols.transaction_error_processing', transaction_id=transaction_id, protocol_name=protocol_name) }}" id="protocol-delete" method="POST">
+                            {{ protocol_data | safe }}
+                            <p style="margin-top: 20px; margin-bottom: 10px; color: #dc3545">Выбранные случаи будут удалены из отправляемого файла, на основе новых данных будет сформирована новая транзакция и помещена на отправку в тестовый контур ТФОМС</p>
+                            <button type="submit" class="btn btn-primary" style="margin-top: 20px;"><i class="bi bi-arrow-right-square"></i> Удалить из протокола и отправить в тестовый контур</button>
+                        </form>
+                    </div>
+                <hr style="margin-bottom: 20px; margin-top: 40px;">
+                <div class="row">
+                        <h4 style="margin-bottom: 20px; margin-top: 20px;"><i class="bi bi-filetype-xml" style="color: #14a711"></i> Случаи для выгрузки в XML</h4>
+                    <div class="col">
+                        <form action="{{ url_for('protocols.transaction_error_get', transaction_id=transaction_id, protocol_name=protocol_name) }}" id="protocol-get" method="POST" style="margin-bottom: 10px;">
+                            {{ protocol_data | safe }}
+                            <p style="margin-bottom: 10px; color: #dc3545">Выбранные случаи будут выгружены в новый файл и скачаны в XML формате</p>
+                            <button type="submit" class="btn btn-success" style="margin-top: 20px;"><i class="bi bi-filetype-xml"></i> Выгрузить выбранные случаи в файл XML</button>
+                        </form>
+                    </div>
+                </div>
+                </div>
+	        </div>
+        </div>
+    </div>
+{% endblock %}

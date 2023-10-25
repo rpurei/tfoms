@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block navbar %}
+    <div class="container">
+    <div class="text-center mt-4 p-4">
+        <a class="navbar-brand" href="{{ url_for('transactions.index_show') }}"></a>
+    </div>
+    </div>
+{% endblock %}
+{% block content %}
+{{ super() }}
+<div class="container">
+        <div class="row">
+            <div class="col-md-4 offset-md-4">
+                <div class="login-form bg-light mt-4 p-4 bg-light shadow bg-white rounded">
+                    <form action="{{ url_for('users.register_show') }}" method="POST" class="row g-3">
+                        {{ register_form.csrf_token }}
+                        <h4 class="text-center">Регистрация пользователя</h4>
+                        <hr class="mt-4">
+                        <div class="col-12">
+                            {{ register_form.login(placeholder='Имя для входа', class_='form-control') }}
+                        </div>
+                        <div class="col-12">
+                            {{ register_form.name(placeholder='Имя пользователя', class_='form-control') }}
+                        </div>
+                        <div class="col-12">
+                            {{ register_form.email(placeholder='e-mail', class_='form-control') }}
+                        </div>
+                        <div class="col-12">
+                            {{ register_form.password(placeholder='Пароль', class_='form-control')}}
+                        </div>
+                         <div class="col-12">
+                            {{ register_form.password_repeat(placeholder='Подтвердите пароль', class_='form-control')}}
+                        </div>
+                        <div class="col-12">
+                            <a class="btn btn-outline-secondary" href="{{ url_for('users.users_show') }}" role="button"><i class="bi bi-arrow-left"></i> Отмена</a>
+                            <button class="btn btn-outline-primary float-end" type="submit"><i class="bi bi-person-plus-fill"></i> Регистрация</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

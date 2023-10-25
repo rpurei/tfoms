@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+    {{ super() }}
+    <div class="page-wrap d-flex flex-row align-items-center">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-12 text-center">
+                    <span class="display-1 d-block">404</span>
+                    <div class="mb-4 lead">Страница не найдена</div>
+                    <a class="btn btn-outline-secondary" href="{{ url_for('transactions.index_show') }}" role="button"><i class="bi bi-house-fill"></i> На главную</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block content %}
+    {{ super() }}
+<div class="container" xmlns="http://www.w3.org/1999/html">
+        <div class="card" style="margin-top: 20px;">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col" style="margin-bottom: 20px;">
+                        <h4><i class="bi bi-file-earmark-medical"></i> Транзакция: {{ session_id }}</h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <a class="btn btn-outline-secondary" href="{{ url_for('transactions.index_show') }}" role="button"><i class="bi bi-house-fill"></i> На главную</a>
+                    </div>
+                    <div class="col">
+                        <form class="form-inline float-end" action="{{ url_for('transactions.transaction_delete', transaction_id=session_id) }}" id="trans-delete" method="POST">
+                            <button type="submit" class="btn btn-outline-danger mb-2"><i class="bi bi-x-square"></i> Удалить транакцию</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                {% if file_contents %}
+                <h4>
+                    Отправляемые файлы:
+                </h4>
+                <table class="table table-bordered" style="margin-top: 20px;">
+                            <thead class="thead">
+                                <tr>
+                                    {% for cell in file_contents_header %}
+                                         <th scope="col">{{ cell }}</th>
+                                    {% endfor %}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for row in file_contents %}
+                                    <tr>
+                                        {% for cell in row %}
+                                            <td>
+                                                {{ cell | safe }}
+                                            </td>
+                                        {% endfor %}
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                </table>
+                {% else %}
+                {% endif %}
+            </div>
+        </div>
+        <div class="card" style="margin-top: 20px;">
+            <div class="card-body">
+                <form class="form-inline" action="{{ url_for('files.file_send') }}" id="file-sending" method="POST">
+                    <p style="margin-top: 10px;">Примечание:</p>
+                    <textarea class="form-control" id="file_note" rows="3" autofocus maxlength="2048" name="file_note"></textarea>
+                    <input type="hidden" id="session_id" name="session_id" value="{{ session_id }}">
+                    <input type="hidden" id="trans_parent" name="trans_parent" value="{{ trans_parent }}">
+                    <button type="submit" class="btn btn-outline-primary mb-2" style="margin-top: 20px;"><i class="bi bi-file-earmark-arrow-up"></i> Отправить</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

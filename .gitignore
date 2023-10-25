@@ -1,0 +1,12 @@
+__pycache__
+venv
+*.zip
+.idea
+*.xml
+db
+*.pid
+*.log
+build
+uploads
+transactions
+.idea

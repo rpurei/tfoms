@@ -1,0 +1,186 @@
+{% extends "base_refresh.html" %}
+{% block content %}
+    {{ super() }}
+    <div class="flex-fill">
+        <div class="text-center mt-5">
+        </div>
+    </div>
+    <div class="container">
+    <div class="card" style="margin-top: 20px;">
+       <div class="card-body">
+            <div class="row">
+                <div class="col">
+                    <a class="btn btn-outline-secondary" href="{{ url_for('transactions.index_show') }}" role="button"><i class="bi bi-house-fill"></i> На главную</a>
+                    <button class="btn btn-danger" type="button" data-bs-toggle="collapse" data-bs-target="#collapseButtons" aria-expanded="false" aria-controls="collapseButtons"><i class="bi bi-caret-down-square"></i></button>
+                    {% if send_button %}
+                        <a class="btn btn-outline-danger" href="{{ url_for('transactions.transaction_send', transaction_id=send_button) }}" role="button" style="margin-right: 20px;"><i class="bi bi-arrow-right-square-fill"></i> Отправить в основной контур</a>
+                    {% endif %}
+                    {% if records_edit_button %}
+                        {{ records_edit_button | safe}}
+                    {% endif %}
+                </div>
+                <div class="col">
+                    <form class="form-inline float-end" action="{{ url_for('transactions.transaction_delete', transaction_id=transaction_id) }}" id="trans-delete" method="POST" style="margin-left: 5px;">
+                        <button type="submit" class="btn btn-outline-danger mb-2" style=""><i class="bi bi-x-square"></i> Удалить транзакцию</button>
+                    </form>
+                    {% if protocol_url %}
+                        <a class="btn btn-outline-info float-end" href="{{ url_for("protocols.file_protocol_show", transaction_id=transaction_id, protocol_name=protocol_url) }}" role="button"><i class="bi bi-file-earmark-spreadsheet"></i> Показать протокол</a>
+                        <a class="btn btn-outline-success float-end" href="{{ url_for("files.file_protocol_download", protocol_name=protocol_url) }}" role="button" style="margin-right: 5px;"><i class="bi bi-file-earmark-arrow-down"></i> Скачать протокол</a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="collapse" id="collapseButtons">
+                <div class="card card-body">
+                    <div class="row">
+                        {% if protocol_id %}
+                            <div class="col-auto">
+                                <form class="form-inline" action="{{ url_for('transactions.transaction_status_check', transaction_id=transaction_id) }}" id="trans-delete" method="POST" style="margin-top: 5px;">
+                                    <button type="submit" class="btn btn-outline-primary mb-2" style=""><i class="bi bi-activity"></i> Запросить статус</button>
+                                </form>
+                            </div>
+                        {% else %}
+                            <div class="col-auto">
+                                <div style="color: #dc3545; margin-top: 10px">Запрос статуса недоступен - отсутствует ID протокола, полученного ТФОМС</div>
+                            </div>
+                        {% endif %}
+                        <div class="col-auto">
+                            <form class="form-inline" action="{{ url_for('transactions.transaction_resend', transaction_id=transaction_id) }}" id="trans-delete" method="POST" style="margin-top: 5px;">
+                                <button type="submit" class="btn btn-outline-warning mb-2" style=""><i class="bi bi-send-check"></i> Отправить повторно</button>
+                            </form>
+                        </div>
+                        <div class="col-auto">
+                            <form class="form-inline" action="{{ url_for('transactions.transaction_stop', transaction_id=transaction_id) }}" id="trans-stop" method="POST" style="margin-top: 5px;">
+                                <button type="submit" class="btn btn-outline-danger mb-2" style=""><i class="bi bi-stop-btn"></i> Остановить обработку</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+       </div>
+    </div>
+    {% if result_data_trans %}
+    <div class="card" style="margin-top: 20px;">
+        <div class="card-body">
+            <h4 style="margin-bottom: 20px;"><i class="bi bi-file-earmark-medical"></i> Данные транзакции</h4>
+            {% if parent_trans %}
+                <a class="btn btn-outline-success" href="{{ url_for('transactions.transaction_detail', transaction_id=parent_trans) }}" role="button" style="margin-bottom: 20px;"><i class="bi bi-arrow-up-square"></i> Родительская транзакция</a>
+            {% endif %}
+            <table class="table table-bordered">
+                <thead class="thead">
+                    <tr>
+                        {% for cell in result_header_trans %}
+                            <th scope="col">{{ cell }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in result_data_trans %}
+                        <tr>
+                            {% for cell in row %}
+                                    <td>{{ cell | safe }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+            {% if out_data %}
+            <table class="table table-bordered">
+                <thead class="thead">
+                    <tr>
+                        <th scope="col">Ответ ТФОМС</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ out_data | safe }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            {% endif %}
+        </div>
+    </div>
+    <div class="card" style="margin-top: 20px;">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-auto">
+                    <h4 style="margin-bottom: 20px;"><i class="bi bi-files"></i> Файлы транзакции</h4>
+                </div>
+                <div class="col-auto">
+                    <form class="form-inline" action="{{ url_for('files.file_zip_download', transaction_id=transaction_id) }}" id="trans-zip" method="POST" style="">
+                        <button type="submit" class="btn btn-outline-success mb-2" style=""><i class="bi bi-file-earmark-zip" style="font-size: 12pt; padding: 5px; border-radius: 4px;"></i> Скачать в ZIP</button>
+                    </form>
+                </div>
+            </div>
+            <table class="table table-bordered">
+                <thead class="thead">
+                    <tr>
+                        {% for cell in result_header_files %}
+                            <th scope="col">{{ cell }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in result_data_files %}
+                        <tr>
+                            {% for cell in row %}
+                                {% if cell == row[0] %}
+                                    <td>
+                                        <div class="row">
+                                        <div class="col">
+                                            {{ cell }}
+                                        </div>
+                                        <div class="col">
+                                            <a href="{{ row[1] }}" style="float: right;"><i class="bi bi-filetype-xml btn-outline-success" style="font-size: 12pt; padding: 5px; border-radius: 4px;"></i></a>
+                                            <a target="_blank" rel="noopener noreferrer" href="{{ row[2] }}" style="float: right;"><i class="bi bi-pencil-square btn-outline-danger" style="font-size: 12pt; padding: 5px; border-radius: 4px;"></i></a>
+                                            {% if row[3] %}
+                                                <a href="{{ row[3] }}" style="float: right;"><i class="bi bi-printer btn-outline-secondary" style="font-size: 12pt; padding: 5px; border-radius: 4px;"></i></a>
+                                            {% endif %}
+                                        </div>
+                                        </div>
+                                    </td>
+                                {% elif cell == row[1] %}
+                                {% elif cell == row[2] %}
+                                {% elif cell == row[3] %}
+                                {% else %}
+                                    <td>{{ cell | safe }}</td>
+                                {% endif %}
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card" style="margin-top: 20px;">
+        <div class="card-body">
+            <h4 style="margin-bottom: 20px;"><i class="bi bi-list-columns-reverse"></i> Журнал транзакции</h4>
+            <table class="table table-bordered">
+                <thead class="thead">
+                    <tr>
+                        {% for cell in result_header %}
+                            <th scope="col">{{ cell }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in result_data %}
+                        <tr>
+                            {% for cell in row %}
+                                  <td>{{ cell | safe }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% else %}
+        <div class="card" style="margin-top: 20px;">
+            <div class="card-body">
+                <h4 style="margin-top: 20px; margin-bottom: 20px;">Записей журнала нет</h4>
+            </div>
+        </div>
+    {% endif %}
+	</div>
+{% endblock %}

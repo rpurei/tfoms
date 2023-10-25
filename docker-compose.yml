@@ -1,0 +1,41 @@
+version: "3"
+
+services:
+  db:
+    image: mysql:8.0
+    command: --default-authentication-plugin=caching_sha2_password --skip-log-bin
+    restart: always
+    cap_add:
+      - SYS_NICE
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=ChangeMe2023
+      - TZ=Europe/Moscow
+    volumes:
+      - ./db:/var/lib/mysql #:z - раскомментить в случае ругани SELinux
+      
+  app:
+    container_name: exchsrv
+    build: ./exchsrv
+    ports:
+      - "80:80"
+    expose:
+      - "80"
+    depends_on:
+      - db
+    volumes:
+     - ./exchsrv:/exchsrv #:z - раскомментить в случае ругани SELinux
+    environment:
+      - WAIT_HOSTS=db:3306
+      - WAIT_HOSTS_TIMEOUT=600
+      - WAIT_SLEEP_INTERVAL=30
+      - WAIT_HOST_CONNECT_TIMEOUT=60
+      - TZ=Europe/Moscow
+
+
+ # adminer: - если появится необходимость просмотра БД приложения
+ #   image: adminer
+ #   restart: always
+ #   ports:
+ #     - "8080:8080"

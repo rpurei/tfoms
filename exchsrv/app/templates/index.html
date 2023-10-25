@@ -1,0 +1,102 @@
+{% extends "base_refresh.html" %}
+{% block content %}
+    {{ super() }}
+    <div class="flex-fill">
+        <div class="text-center mt-5">
+        </div>
+    </div>
+    <div class="container">
+        <div class="card" style="margin-top: 20px;">
+            <div class="card-body">
+                <h4 style="margin-bottom: 20px;"><i class="bi bi-file-earmark-arrow-up"></i> Отправка протоколов</h4>
+                <label for="file-upload" class="form-label">Выберите файлы для отправки</label>
+                <form class="form-inline" action="{{ url_for('files.upload_file') }}" id="file-upload" method="POST" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-10">
+                            <input class="form-control" type="file" name="files[]" multiple required>
+                        </div>
+                        <div class="col-2">
+                            <button type="submit" class="btn btn-outline-primary mb-2 w-100"><i class="bi bi-file-earmark-arrow-up"></i> Загрузить</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+                {% if files_list %}
+        <div class="card" style="margin-top: 20px;">
+            <div class="card-body">
+                    <form class="form-inline" action="{{ url_for('files.file_delete') }}" id="file-delete" method="POST">
+                        <h4 style="margin-top: 20px; margin-bottom: 20px;"><i class="bi bi-filetype-xml"></i> Необработанные файлы</h4>
+                        <table class="table table-bordered">
+                            <thead class="thead">
+                                <tr>
+                                    {% for cell in files_list_header %}
+                                         <th scope="col">{{ cell }}</th>
+                                    {% endfor %}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for row in files_list %}
+                                    <tr>
+                                        {% for cell in row %}
+                                            {% if cell != row[0] %}
+                                                <td>{{ cell | safe }}</td>
+                                            {% else %}
+                                                <td style="width: 4%">
+                                                    <input type="checkbox" name="file_delete" value="{{ cell }}">
+                                                    <a href="{{ url_for('files.file_download', name=cell) }}"><i class="bi bi-file-earmark-arrow-down btn-outline-success"></i></a>
+                                                </td>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <button type="submit" class="btn btn-outline-danger mb-2"><i class="bi bi-file-earmark-excel"></i> Удалить файлы</button>
+                    </form>
+            </div>
+        </div>
+        {% else %}
+
+        {% endif %}
+        {% if result_data %}
+        <div class="card" style="margin-top: 20px;">
+            <div class="card-body">
+                <h4 style="margin-bottom: 20px;"><i class="bi bi-file-earmark-medical"></i> Транзакции</h4>
+                <table class="table table-bordered">
+                    <thead class="thead">
+                        <tr>
+                            {% for cell in result_header %}
+                                <th scope="col">{{ cell }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in result_data %}
+                            <tr>
+                                {% for cell in row %}
+                                   {% if cell == row[0] %}
+                                      <td><a href="{{ url_for('transactions.transaction_detail', transaction_id=cell) }}"><i class="bi bi-file-earmark-medical btn-outline-secondary" style="font-size: 14pt; padding: 6px; border-radius: 4px; margin: 2px;"></i></a></td>
+                                   {% elif cell == row[4] %}
+                                      <td>
+                                            {% if cell %}
+                                                <div class="col">
+                                                    <a href="{{ url_for('files.file_protocol_download', protocol_name=cell) }}"><i class="bi bi-file-earmark-arrow-down btn-outline-success"  style="font-size: 14pt; padding: 2px; border-radius: 4px;"></i></a>
+                                                    <a href="{{ url_for('protocols.file_protocol_show', transaction_id=row[0], protocol_name=cell) }}"><i class="bi bi-file-earmark-spreadsheet btn-outline-info"  style="font-size: 14pt; padding: 2px; border-radius: 4px;"></i></a>
+                                                </div>
+                                            {% endif %}
+                                      </td>
+				                   {% else %}
+                                      <td>{{ cell | safe }}</td>
+                                   {% endif %}
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% if pagination %}{{ pagination.links }}{% endif %}
+            </div>
+        </div>
+        {% endif %}
+	</div>
+{% endblock %}

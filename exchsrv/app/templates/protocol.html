@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+    {{ super() }}
+    <div class="container">
+        <div class="text-center mt-5">
+        </div>
+        <div class="row">
+            <div class="col">
+                <a class="btn btn-outline-secondary" href="{{ url_for('transactions.transaction_detail', transaction_id=transaction_id) }}" role="button"><i class="bi bi-arrow-left-square"></i> К транзакции</a>
+            </div>
+            <div class="col">
+                <a class="btn btn-outline-success float-end" href="{{ url_for('protocols.transaction_protocol_xlsx_get', transaction_id=transaction_id, protocol_name=protocolname) }}" role="button"><i class="bi bi-filetype-xlsx"></i> Скачать в XLSX</a>
+            </div>
+        </div>
+    </div>
+    <div class="flex-fill">
+        <div class="card" style="margin-top: 20px;">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <h4 style="margin-bottom: 20px;"><i class="bi bi-file-x" style="color: #dc3545"></i> Протокол ошибок файла</h4>
+                    </div>
+                </div>
+                {{ protocol_data | safe }}
+	        </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block navbar %}
+    <div class="container">
+    <div class="text-center mt-4 p-4">
+        <a class="navbar-brand" href="{{ url_for('transactions.index_show') }}"></a>
+    </div>
+    </div>
+{% endblock %}
+{% block content %}
+{{ super() }}
+<div class="container">
+        <div class="row">
+            <div class="col-md-4 offset-md-4">
+                <div class="login-form bg-light mt-4 p-4 bg-light shadow bg-white rounded">
+                    <form action="{{ url_for('users.auth_login') }}" method="POST" class="row g-3">
+                        {{ login_form.csrf_token }}
+                        <h4 class="text-center">Учетные данные</h4>
+                        <hr class="mt-4">
+                        <div class="col-12">
+                            {{ login_form.login(placeholder='Имя пользователя', class_='form-control') }}
+                        </div>
+                        <div class="col-12">
+                            {{ login_form.password(placeholder='Пароль', class_='form-control')}}
+                        </div>
+                        <div class="col-12">
+                            <div class="form-check">
+                                {{ login_form.remember(class_="form-check-input") }}
+                                {{ login_form.remember.label(class_="form-check-label") }}
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <button class="btn btn-outline-primary float-end" type="submit"><i class="bi bi-person-fill"></i> Вход</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
